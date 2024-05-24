@@ -1,0 +1,246 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "background": "#FFFFFF",
+  "padding": 5,
+  "width": 400,
+  "height": 300,
+  "title": {
+    "text": "Average Salaries Across Data Roles",
+    "subtitle": "Exploring Mean Salaries in USD by Job Title and Work Year",
+    "fontSize": 16,
+    "subtitleFontSize": 12,
+    "color": "#2E4057",
+    "subtitleColor": "#34495E",
+    "offset": 20,
+    "frame": "group"
+  },
+  "style": "cell",
+  "encode": {"update": {"fill": {"value": "#FFFFFF"}}},
+  "data": [
+    {"name": "jobTitleFilter_store"},
+    {
+      "name": "source_0",
+      "url": "https://raw.githubusercontent.com/paizskarola/paizskarola.github.io/main/adatforras_tisztitott.csv",
+      "format": {
+        "type": "csv",
+        "parse": {"work_year": "date"},
+        "delimiter": ","
+      },
+      "transform": [
+        {
+          "type": "aggregate",
+          "groupby": ["work_year", "job_title"],
+          "ops": ["mean"],
+          "fields": ["salary_in_usd"],
+          "as": ["mean_salary_in_usd"]
+        },
+        {
+          "type": "filter",
+          "expr": "!length(data(\"jobTitleFilter_store\")) || vlSelectionTest(\"jobTitleFilter_store\", datum)"
+        },
+        {
+          "field": "work_year",
+          "type": "timeunit",
+          "units": ["year"],
+          "as": ["year_work_year", "year_work_year_end"]
+        }
+      ]
+    },
+    {
+      "name": "data_0",
+      "source": "source_0",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "(isDate(datum[\"year_work_year\"]) || (isValid(datum[\"year_work_year\"]) && isFinite(+datum[\"year_work_year\"]))) && isValid(datum[\"mean_salary_in_usd\"]) && isFinite(+datum[\"mean_salary_in_usd\"])"
+        }
+      ]
+    }
+  ],
+  "signals": [
+    {
+      "name": "unit",
+      "value": {},
+      "on": [
+        {"events": "pointermove", "update": "isTuple(group()) ? group() : unit"}
+      ]
+    },
+    {
+      "name": "jobTitleFilter_job_title",
+      "value": null,
+      "bind": {
+        "input": "select",
+        "options": [
+          "Data Engineer",
+          "Data Scientist",
+          "Data Analyst",
+          "ML Engineer",
+          "Analytics Engineer",
+          "Research Scientist",
+          "Data Architect",
+          "Research Engineer",
+          "Data Science",
+          "Business Intelligence Analyst"
+        ],
+        "name": "Select Job Title"
+      }
+    },
+    {
+      "name": "jobTitleFilter",
+      "update": "vlSelectionResolve(\"jobTitleFilter_store\", \"union\", true, true)"
+    },
+    {
+      "name": "jobTitleFilter_tuple",
+      "update": "jobTitleFilter_job_title !== null ? {fields: jobTitleFilter_tuple_fields, values: [jobTitleFilter_job_title]} : null"
+    },
+    {
+      "name": "jobTitleFilter_tuple_fields",
+      "value": [{"type": "E", "field": "job_title"}]
+    },
+    {
+      "name": "jobTitleFilter_modify",
+      "on": [
+        {
+          "events": {"signal": "jobTitleFilter_tuple"},
+          "update": "modify(\"jobTitleFilter_store\", jobTitleFilter_tuple, true)"
+        }
+      ]
+    }
+  ],
+  "marks": [
+    {
+      "name": "layer_0_marks",
+      "type": "line",
+      "style": ["line"],
+      "sort": {"field": "datum[\"year_work_year\"]"},
+      "interactive": true,
+      "from": {"data": "source_0"},
+      "encode": {
+        "update": {
+          "strokeWidth": {"value": 2},
+          "stroke": {"value": "#1f7872"},
+          "tooltip": {
+            "signal": "{\"Year\": timeFormat(datum[\"work_year\"], '%b %d, %Y'), \"Mean Salary (USD)\": format(datum[\"mean_salary_in_usd\"], \"\")}"
+          },
+          "description": {
+            "signal": "\"work_year (year): \" + (timeFormat(datum[\"year_work_year\"], timeUnitSpecifier([\"year\"], {\"year-month\":\"%b %Y \",\"year-month-date\":\"%b %d, %Y \"}))) + \"; mean_salary_in_usd: \" + (format(datum[\"mean_salary_in_usd\"], \"\")) + \"; Year: \" + (timeFormat(datum[\"work_year\"], '%b %d, %Y')) + \"; Mean Salary (USD): \" + (format(datum[\"mean_salary_in_usd\"], \"\"))"
+          },
+          "x": {"scale": "x", "field": "year_work_year"},
+          "y": {"scale": "y", "field": "mean_salary_in_usd"},
+          "defined": {
+            "signal": "isValid(datum[\"year_work_year\"]) && isFinite(+datum[\"year_work_year\"]) && isValid(datum[\"mean_salary_in_usd\"]) && isFinite(+datum[\"mean_salary_in_usd\"])"
+          }
+        }
+      }
+    },
+    {
+      "name": "layer_1_marks",
+      "type": "symbol",
+      "style": ["point"],
+      "interactive": true,
+      "from": {"data": "data_0"},
+      "encode": {
+        "update": {
+          "opacity": {"value": 1},
+          "fill": {"value": "#4c78a8"},
+          "tooltip": {
+            "signal": "{\"Year\": timeFormat(datum[\"work_year\"], '%b %d, %Y'), \"Mean Salary (USD)\": format(datum[\"mean_salary_in_usd\"], \"\")}"
+          },
+          "ariaRoleDescription": {"value": "point"},
+          "description": {
+            "signal": "\"work_year (year): \" + (timeFormat(datum[\"year_work_year\"], timeUnitSpecifier([\"year\"], {\"year-month\":\"%b %Y \",\"year-month-date\":\"%b %d, %Y \"}))) + \"; mean_salary_in_usd: \" + (format(datum[\"mean_salary_in_usd\"], \"\")) + \"; Year: \" + (timeFormat(datum[\"work_year\"], '%b %d, %Y')) + \"; Mean Salary (USD): \" + (format(datum[\"mean_salary_in_usd\"], \"\"))"
+          },
+          "x": {"scale": "x", "field": "year_work_year"},
+          "y": {"scale": "y", "field": "mean_salary_in_usd"}
+        }
+      }
+    }
+  ],
+  "scales": [
+    {
+      "name": "x",
+      "type": "time",
+      "domain": {
+        "fields": [
+          {"data": "source_0", "field": "year_work_year"},
+          {"data": "data_0", "field": "year_work_year"}
+        ]
+      },
+      "range": [0, {"signal": "width"}]
+    },
+    {
+      "name": "y",
+      "type": "linear",
+      "domain": {
+        "fields": [
+          {"data": "source_0", "field": "mean_salary_in_usd"},
+          {"data": "data_0", "field": "mean_salary_in_usd"}
+        ]
+      },
+      "range": [{"signal": "height"}, 0],
+      "nice": true,
+      "zero": true
+    }
+  ],
+  "axes": [
+    {
+      "scale": "x",
+      "orient": "bottom",
+      "gridScale": "y",
+      "grid": true,
+      "tickCount": {"signal": "ceil(width/40)"},
+      "tickMinStep": {
+        "signal": "datetime(2002, 0, 1, 0, 0, 0, 0) - datetime(2001, 0, 1, 0, 0, 0, 0)"
+      },
+      "domain": false,
+      "labels": false,
+      "aria": false,
+      "maxExtent": 0,
+      "minExtent": 0,
+      "ticks": false,
+      "zindex": 0
+    },
+    {
+      "scale": "y",
+      "orient": "left",
+      "tickCount": 6,
+      "gridScale": "x",
+      "grid": true,
+      "domain": false,
+      "labels": false,
+      "aria": false,
+      "maxExtent": 0,
+      "minExtent": 0,
+      "ticks": false,
+      "zindex": 0
+    },
+    {
+      "scale": "x",
+      "orient": "bottom",
+      "grid": false,
+      "title": "Work Year",
+      "titleColor": "#34495E",
+      "format": {
+        "signal": "timeUnitSpecifier([\"year\"], {\"year-month\":\"%b %Y \",\"year-month-date\":\"%b %d, %Y \"})"
+      },
+      "labelFlush": true,
+      "labelOverlap": true,
+      "tickCount": {"signal": "ceil(width/40)"},
+      "tickMinStep": {
+        "signal": "datetime(2002, 0, 1, 0, 0, 0, 0) - datetime(2001, 0, 1, 0, 0, 0, 0)"
+      },
+      "zindex": 0
+    },
+    {
+      "scale": "y",
+      "orient": "left",
+      "grid": false,
+      "title": "Mean Salary (USD)",
+      "tickCount": 6,
+      "titleColor": "#34495E",
+      "labelOverlap": true,
+      "zindex": 0
+    }
+  ],
+  "config": {}
+}

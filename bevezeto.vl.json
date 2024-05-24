@@ -1,0 +1,79 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Average Salaries Across Data Roles",
+    "subtitle": "Exploring Mean Salaries in USD by Job Title and Work Year",
+    "fontSize": 16,
+    "subtitleFontSize": 12,
+    "color": "#2E4057",
+    "subtitleColor": "#34495E",
+    "offset": 20
+  },
+  "height": 300,
+  "width": 400,
+  "background": "#FFFFFF",
+  "view": {"fill": "#FFFFFF"},
+  "data": {
+    "url": "https://raw.githubusercontent.com/paizskarola/paizskarola.github.io/main/adatforras_tisztitott.csv",
+    "format": {"type": "csv"}
+  },
+  "transform": [
+    {
+      "aggregate": [
+        {"op": "mean", "field": "salary_in_usd", "as": "mean_salary_in_usd"}
+      ],
+      "groupby": ["work_year", "job_title"]
+    },
+    {"filter": {"selection": "jobTitleFilter"}}
+  ],
+  "mark": {"type": "line", "color": "#1f7872", "strokeWidth": 2, "point": true},
+  "encoding": {
+    "x": {
+      "field": "work_year",
+      "type": "temporal",
+      "timeUnit": "year",
+      "axis": {"title": "Work Year", "titleColor": "#34495E"}
+    },
+    "y": {
+      "field": "mean_salary_in_usd",
+      "type": "quantitative",
+      "axis": {
+        "title": "Mean Salary (USD)",
+        "titleColor": "#34495E",
+        "tickCount": 6
+      }
+    },
+    "tooltip": [
+      {"field": "work_year", "type": "temporal", "title": "Year"},
+      {
+        "field": "mean_salary_in_usd",
+        "type": "quantitative",
+        "title": "Mean Salary (USD)"
+      }
+    ]
+  },
+  "selection": {
+    "jobTitleFilter": {
+      "type": "single",
+      "fields": ["job_title"],
+      "bind": {
+        "input": "select",
+        "options": [
+          "Data Engineer",
+          "Data Scientist",
+          "Data Analyst",
+          "ML Engineer",
+          "Analytics Engineer",
+          "Research Scientist",
+          "Data Architect",
+          "Research Engineer",
+          "Data Science",
+          "Business Intelligence Analyst"
+        ],
+        "name": "Select Job Title"
+      }
+    }
+  },
+  "resolve": {"scale": {"y": "shared"}},
+  "config": {}
+}
