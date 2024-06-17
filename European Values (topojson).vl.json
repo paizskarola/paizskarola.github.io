@@ -1,6 +1,6 @@
 {
 "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-"description": "A map of European values by country.",
+"description": "A map showing the percentage of ICT workers as part of the active workforce in European countries.",
 "width": 500,
 "height": 550,
 "data": {
@@ -10,20 +10,14 @@
 "params": [
 {
 "name": "Select Year",
-"value": {"min": 2017, "max": 2023},
+"value": 2023,
 "bind": {"input": "range", "min": 2017, "max": 2023, "step": 1}
 }
 ],
 "layer": [
 {
-"mark": {
-"type": "geoshape",
-"stroke": "white",
-"strokeWidth": 1
-},
-"encoding": {
-"color": {"value": "#dedede"}
-}
+"mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 1},
+"encoding": {"color": {"value": "#dedede"}}
 },
 {
 "transform": [
@@ -46,11 +40,7 @@
 }
 }
 ],
-"mark": {
-"type": "geoshape",
-"stroke": "white",
-"strokeWidth": 0.5
-},
+"mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 0.5},
 "encoding": {
 "color": {
 "field": "value",
@@ -59,7 +49,7 @@
 },
 "tooltip": [
 {"field": "id", "type": "nominal", "title": "Country"},
-{"field": "value", "type": "quantitative", "title": "Value"},
+{"field": "value", "type": "quantitative", "title": "Percentage of ICT Workers"},
 {"field": "year", "type": "ordinal", "title": "Year"}
 ]
 }
@@ -67,12 +57,11 @@
 ],
 "projection": {"type": "mercator"},
 "title": {
-"text": "European Values",
-"subtitle": "Source: Your Data Source",
+"text": "Percentage of ICT Workers in Active Workforce",
+"subtitle": "Source: Eurostat (isoc_sks_itspt)",
 "fontSize": 16,
 "subtitleFontSize": 12,
 "subtitleFontWeight": "lighter",
 "anchor": "middle"
 }
 }
-
