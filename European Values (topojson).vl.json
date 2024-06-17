@@ -16,8 +16,8 @@
   ],
   "layer": [
     {
-      "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 1},
-      "encoding": {"color": {"value": "#dedede"}}
+      "mark": {"type": "geoshape", "stroke": "#FFFFFF", "strokeWidth": 1},
+      "encoding": {"color": {"value": "#C9C9C9"}}
     },
     {
       "transform": [
@@ -40,12 +40,16 @@
           }
         }
       ],
-      "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 0.5},
+      "mark": {"type": "geoshape", "stroke": "#FFFFFF", "strokeWidth": 0.5},
       "encoding": {
         "color": {
           "field": "value",
           "type": "quantitative",
-          "scale": {"scheme": "blues"}
+          "scale": {
+            "scheme": "blues",
+            "domain": [0, 10],  
+            "range": ["#C9C9C9", "#0063AF", "#122B39"]  
+          }
         },
         "tooltip": [
           {"field": "id", "type": "nominal", "title": "Country"},
@@ -66,5 +70,22 @@
     "subtitleColor": "#34495E",
     "anchor": "start",
     "offset": 18
+  },
+  "config": {
+    "background": "#FFFFFF",  
+    "view": {"stroke": "#FFFFFF"},  
+    "axis": {
+      "domainColor": "#676A86",
+      "domainOpacity": 0.5,
+      "gridColor": "#676A86",
+      "gridOpacity": 0.5,
+      "labelColor": "#676A86",
+      "labelOpacity": 0.7,
+      "tickColor": "#676A86",
+      "tickOpacity": 0.5,
+      "titleColor": "#676A86",
+      "titleFontSize": 12,
+      "titleOpacity": 0.8
+    }
   }
 }
