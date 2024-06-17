@@ -1,0 +1,187 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Top 5 and Bottom 5 Salary Changes by Job Title",
+    "subtitle": "Comparing changes from 2021 to 2024",
+    "fontSize": 16,
+    "fontWeight": "bold",
+    "subtitleFontSize": 14,
+    "color": "#34495E",
+    "subtitleColor": "#34495E",
+    "font": "Circular Std",
+    "anchor": "start",
+    "offset": 18 
+  },
+  "width": 520,
+  "height": 300,
+  "background": "#FFFFFF",
+  "data": {
+    "values": [
+      {"a": "Data Analyst Lead", "b": 5.49},
+      {"a": "Lead Data Scientist", "b": 1.93},
+      {"a": "Data Analytics Lead", "b": 1.29},
+      {"a": "Data Product Owner", "b": 1.18},
+      {"a": "AI Developer", "b": -0.75},
+      {"a": "Big Data Engineer", "b": -0.75},
+      {"a": "AI Programmer", "b": -0.59},
+      {"a": "Consultant Data Engineer", "b": -0.58},
+      {"a": "Applied Data Scientist", "b": -0.43}
+    ]
+  },
+  "encoding": {
+    "y": {
+      "field": "a",
+      "type": "nominal",
+      "sort": {"op": "mean", "field": "b", "order": "descending"},
+      "axis": {
+        "title": "",
+        "titleColor": "#676A86",
+        "titleFont": "Circular Std",
+        "titleFontSize": 12,
+        "titleOpacity": 0.8,
+        "labelColor": "#676A86",
+        "labelFont": "Circular Std",
+        "labelFontSize": 12,
+        "labelOpacity": 0.7,
+        "tickColor": "#676A86",
+        "tickOpacity": 0.5,
+        "domainColor": "#676A86",
+        "domainOpacity": 0.5,
+        "labelBaseline": "middle",
+        "labelPadding": 10
+      }
+    },
+    "x": {
+      "field": "b",
+      "type": "quantitative",
+      "title": "Salary Change (%)",
+      "scale": {"domain": [-2, 6], "padding": 10},
+      "axis": {
+        "titleColor": "#676A86",
+        "titleFont": "Circular Std",
+        "titleFontSize": 12,
+        "titleOpacity": 0.8,
+        "labelColor": "#676A86",
+        "labelFont": "Circular Std",
+        "labelFontSize": 12,
+        "labelOpacity": 0.7,
+        "tickColor": "#676A86",
+        "tickOpacity": 0.5,
+        "domainColor": "#676A86",
+        "domainOpacity": 0.5,
+        "gridColor": {
+          "condition": {"test": "datum.value === 0", "value": "black"},
+          "value": "#676A86",
+          "gridDash": [1, 5],
+          "gridOpacity": 0.5
+        },
+        "titleAlign": "center",
+        "titleAnchor": "middle",
+        "titleY": 30,
+        "labelBaseline": "middle",
+        "labelPadding": 10
+      }
+    },
+    "color": {
+      "field": "b",
+      "type": "quantitative",
+      "scale": {
+        "domain": [-2, -0.5, 0, 6],
+        "range": ["#E6224B", "#FF6F61", "#C9C9C9", "#0063AF"]
+      },
+      "legend": {
+        "title": "",
+        "titleFont": "Circular Std",
+        "titleFontSize": 12,
+        "labelFont": "Circular Std",
+        "labelFontSize": 12,
+        "labelColor": "#676A86",
+        "labelOpacity": 0.8,
+        "titleColor": "#676A86",
+        "titleOpacity": 0.8
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "cornerRadiusEnd": 3
+      },
+      "encoding": {
+        "x": {"field": "b", "type": "quantitative"},
+        "y": {"field": "a", "type": "nominal"},
+        "tooltip": [
+          {"field": "a", "type": "nominal", "title": "Job Title"},
+          {"field": "b", "type": "quantitative", "title": "Salary Change (%)", "format": ".2f"}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": {"expr": "datum.b < 0 ? 'right' : 'left'"},
+        "dx": {"expr": "datum.b < 0 ? -5 : 5"},
+        "dy": 3,
+        "font": "Circular Std",
+        "color": "#676A86",
+        "fontSize": 10
+      },
+      "encoding": {
+        "x": {"field": "b", "type": "quantitative"},
+        "y": {"field": "a", "type": "nominal"},
+        "text": {"field": "b", "type": "quantitative", "format": ".2f"}
+      }
+    }
+  ],
+  "config": {
+    "font": "Circular Std",
+    "axisX": {
+      "domainColor": "#676A86",
+      "domainOpacity": 0.5,
+      "grid": false,
+      "labelAngle": 0,
+      "labelColor": "#676A86",
+      "labelFont": "Circular Std",
+      "labelFontSize": 12,
+      "labelOpacity": 0.7,
+      "tickColor": "#676A86",
+      "tickOpacity": 0.5,
+      "titleAlign": "center",
+      "titleAnchor": "middle",
+      "titleColor": "#676A86",
+      "titleFontSize": 12,
+      "titleOpacity": 0.8,
+      "titleY": 30,
+      "labelBaseline": "middle",
+      "labelPadding": 10
+    },
+    "axisY": {
+      "domainColor": "#676A86",
+      "domainOpacity": 0.5,
+      "gridColor": "#676A86",
+      "gridDash": [1, 5],
+      "gridOpacity": 0.5,
+      "labelColor": "#676A86",
+      "labelFont": "Circular Std",
+      "labelFontSize": 12,
+      "labelOpacity": 0.7,
+      "labelPadding": 5,
+      "tickColor": "#676A86",
+      "tickOpacity": 0.5,
+      "ticks": false,
+      "titleAlign": "left",
+      "titleAngle": 0,
+      "titleBaseline": "middle",
+      "titleColor": "#676A86",
+      "titleFontSize": 12,
+      "titleOpacity": 0.8,
+      "titleX": 0,
+      "titleY": -7
+    }
+  }
+}
+
+
+
+

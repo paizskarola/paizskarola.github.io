@@ -1,0 +1,125 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.8.0.json",
+  "title": {
+  "text": "Top 10 Job Titles by Percentage",
+  "subtitle": "Distribution of Job Titles in the Dataset",
+  "color": "#34495E",
+  "fontSize": 16,
+  "fontWeight": "bold",
+  "subtitleFontSize": 14,
+  "subtitleColor": "#34495E",
+  "anchor": "start",
+  "frame": "full",
+  "offset": 18
+  },
+  "data": {
+  "url": "https://raw.githubusercontent.com/paizskarola/paizskarola.github.io/main/adatforras_tisztitott.csv",
+  "format": {"type": "csv"}
+  },
+  "width": 500,
+  "height": 280,
+  "config": {
+  "font": "Circular Std",
+  "mark": {"line": {"interpolate": "monotone"}},
+  "view": {"stroke": "transparent", "width": 400, "height": 300},
+  "range": {
+  "category": [
+  "#36B7B4",
+  "#E6224B",
+  "#F4C245",
+  "#0063AF",
+  "#00A767",
+  "#179FDB",
+  "#EB5C2E"
+  ],
+  "diverging": ["#E6224B", "#E54753", "#C9C9C9", "#179FDB", "#122B39"],
+  "heatmap": ["#C9C9C9", "#179FDB", "#0063AF", "#122B39"],
+  "ordinal": ["#00A767", "#36B7B4", "#179FDB", "#0063AF", "#243B5A"]
+  },
+  "axisX": {
+  "domainColor": "#676A86",
+  "domainOpacity": 0.5,
+  "grid": false,
+  "labelAngle": 0,
+  "labelColor": "#676A86",
+  "labelOpacity": 0.7,
+  "orient": "bottom",
+  "tickColor": "#676A86",
+  "tickCount": 10,
+  "tickOpacity": 0.5,
+  "title": false,
+  "titleAlign": "center",
+  "titleAnchor": "middle",
+  "titleColor": "#676A86",
+  "titleFontSize": 12,
+  "titleOpacity": 0.8,
+  "titleY": 15
+  },
+  "axisY": {
+  "domainColor": "#676A86",
+  "domainOpacity": 0.5,
+  "gridColor": "#676A86",
+  "gridDash": [1, 5],
+  "gridOpacity": 0.5,
+  "labelColor": "#676A86",
+  "labelOpacity": 0.7,
+  "labelPadding": 5,
+  "tickColor": "#676A86",
+  "tickCount": 8,
+  "tickOpacity": 0.5,
+  "ticks": false,
+  "titleAlign": "left",
+  "titleAngle": 0,
+  "titleBaseline": "bottom",
+  "titleColor": "#676A86",
+  "titleFontSize": 12,
+  "titleOpacity": 0.8,
+  "titleX": 0,
+  "titleY": -7
+  }
+  },
+  "transform": [
+  {"aggregate": [{"op": "count", "as": "count"}], "groupby": ["job_title"]},
+  {
+  "window": [{"op": "rank", "as": "rank"}],
+  "sort": [{"field": "count", "order": "descending"}]
+  },
+  {"filter": "datum.rank <= 10"},
+  {"joinaggregate": [{"op": "sum", "field": "count", "as": "total"}]},
+  {"calculate": "datum.count / datum.total * 100", "as": "percentage"}
+  ],
+  "encoding": {
+  "x": {
+  "field": "percentage",
+  "type": "quantitative",
+  "axis": {"title": "Percentage"}
+  },
+  "y": {
+  "field": "job_title",
+  "type": "nominal",
+  "axis": {"title": ""},
+  "sort": {"op": "sum", "field": "count", "order": "descending"}
+  },
+  "tooltip": [
+  {"field": "job_title", "type": "nominal", "title": "Job Title"},
+  {"field": "percentage", "type": "quantitative", "title": "Percentage", "format": ".2f"}
+  ],
+  "text": {"field": "percentage", "type": "quantitative", "format": ".2f"}
+  },
+  "layer": [
+  {"mark": "bar", "encoding": {"color": {"value": "#E6224B"}}},
+  {
+  "mark": {
+  "type": "text",
+  "align": "left",
+  "baseline": "middle",
+  "dx": 3,
+  "font": "Circular Std",
+  "color": "#676A86"
+  },
+  "encoding": {
+  "text": {"field": "percentage", "type": "quantitative", "format": ".2f"}
+  }
+  }
+  ]
+  }

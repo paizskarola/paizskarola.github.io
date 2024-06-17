@@ -1,0 +1,62 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "A map of European values by country.",
+  "width": 500,
+  "height": 550,
+  "data": {
+    "url": "https://raw.githubusercontent.com/EconomicsObservatory/courses/main/datasets/advanced/europe.topojson",
+    "format": {"type": "topojson", "feature": "europe"}
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "geoshape",
+        "stroke": "white",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "color": {"value": "#dedede"}
+      }
+    },
+    {
+      "transform": [
+        {
+          "lookup": "id",
+          "from": {
+            "data": {
+              "url": "https://raw.githubusercontent.com/paizskarola/paizskarola.github.io/main/ikt_europa_osszetett.csv",
+              "format": {"type": "csv"}
+            },
+            "key": "id",
+            "fields": ["value"]
+          }
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "stroke": "white",
+        "strokeWidth": 0.5
+      },
+      "encoding": {
+        "color": {
+          "field": "value",
+          "type": "quantitative",
+          "scale": {"scheme": "blues"}
+        },
+        "tooltip": [
+          {"field": "id", "type": "nominal", "title": "Country"},
+          {"field": "value", "type": "quantitative", "title": "Value"}
+        ]
+      }
+    }
+  ],
+  "projection": {"type": "mercator"},
+  "title": {
+    "text": "European Values",
+    "subtitle": "Source: Your Data Source",
+    "fontSize": 16,
+    "subtitleFontSize": 12,
+    "subtitleFontWeight": "lighter",
+    "anchor": "middle"
+  }
+}

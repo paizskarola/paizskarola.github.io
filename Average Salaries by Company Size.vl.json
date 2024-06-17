@@ -1,0 +1,175 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Average Salary by Company Size",
+    "subtitle": "Mean Salary in USD Across Different Company Sizes",
+    "color": "#34495E",
+    "fontSize": 16,
+    "fontWeight": "bold",
+    "subtitleFontSize": 14,
+    "subtitleColor": "#34495E",
+    "anchor": "start",
+    "offset": 18 
+  },
+  "height": 270,
+  "width": 610,
+  "background": "#FFFFFF",
+  "view": {"fill": "#FFFFFF"},
+  "data": {
+    "url": "https://raw.githubusercontent.com/paizskarola/paizskarola.github.io/main/adatforras_tisztitott.csv",
+    "format": {"type": "csv"}
+  },
+  "transform": [
+    {
+      "aggregate": [
+        {"op": "mean", "field": "salary_in_usd", "as": "mean_salary_in_usd"}
+      ],
+      "groupby": ["company_size"]
+    },
+    {"calculate": "datum.mean_salary_in_usd / 1000", "as": "mean_salary_in_k"},
+    {
+      "calculate": "round(datum.mean_salary_in_k) + 'K'",
+      "as": "mean_salary_in_k_text"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {"type": "bar"},
+      "encoding": {
+        "x": {
+          "field": "company_size",
+          "type": "nominal",
+          "axis": {
+            "title": "Company Size",
+            "titleColor": "#676A86",
+            "titleOpacity": 0.8,
+            "labelColor": "#676A86",
+            "labelOpacity": 0.7,
+            "tickColor": "#676A86",
+            "tickOpacity": 0.5,
+            "domainColor": "#676A86",
+            "domainOpacity": 0.5,
+            "grid": false,
+            "labelBaseline": "bottom",
+            "labelPadding": 15
+          },
+          "scale": {"domain": ["S", "M", "L"]}
+        },
+        "y": {
+          "field": "mean_salary_in_usd",
+          "type": "quantitative",
+          "axis": {
+            "title": "",
+            "titleColor": "#676A86",
+            "titleOpacity": 0.8,
+            "labelColor": "#676A86",
+            "labelOpacity": 0.7,
+            "tickColor": "#676A86",
+            "tickOpacity": 0.5,
+            "domainColor": "#676A86",
+            "domainOpacity": 0.5,
+            "gridColor": "#676A86",
+            "gridDash": [1, 5],
+            "gridOpacity": 0.5,
+            "ticks": false,
+            "titleAlign": "left",
+            "titleAngle": 0,
+            "titleBaseline": "bottom",
+            "titleFontSize": 12,
+            "titleX": 0,
+            "titleY": -7
+          },
+          "scale": {"domain": [0, 280000]}
+        },
+        "color": {
+          "field": "company_size",
+          "type": "nominal",
+          "scale": {
+            "domain": ["S", "M", "L"],
+            "range": ["#36B7B4", "#E6224B", "#F4C245"]
+          },
+          "legend": null
+        },
+        "tooltip": [
+          {"field": "company_size", "type": "nominal", "title": "Company Size"},
+          {
+            "field": "mean_salary_in_usd",
+            "type": "quantitative",
+            "title": "Mean Salary (USD)",
+            "format": ",.2f"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "baseline": "bottom",
+        "dy": -5,
+        "color": "#676A86"
+      },
+      "encoding": {
+        "x": {"field": "company_size", "type": "nominal"},
+        "y": {"field": "mean_salary_in_usd", "type": "quantitative"},
+        "text": {"field": "mean_salary_in_k_text", "type": "nominal"}
+      }
+    }
+  ],
+  "config": {
+    "font": "Circular Std",
+    "range": {
+      "category": [
+        "#36B7B4",
+        "#E6224B",
+        "#F4C245",
+        "#0063AF",
+        "#00A767",
+        "#179FDB",
+        "#EB5C2E"
+      ],
+      "diverging": ["#E6224B", "#E54753", "#C9C9C9", "#179FDB", "#122B39"],
+      "heatmap": ["#C9C9C9", "#179FDB", "#0063AF", "#122B39"],
+      "ordinal": ["#00A767", "#36B7B4", "#179FDB", "#0063AF", "#243B5A"]
+    },
+    "axisX": {
+      "domainColor": "#676A86",
+      "domainOpacity": 0.5,
+      "grid": false,
+      "labelAngle": 0,
+      "labelColor": "#676A86",
+      "labelOpacity": 0.7,
+      "labelPadding": 10,
+      "labelBaseline": "bottom",
+      "tickColor": "#676A86",
+      "tickOpacity": 0.5,
+      "titleAlign": "center",
+      "titleAnchor": "middle",
+      "titleColor": "#676A86",
+      "titleFontSize": 12,
+      "titleOpacity": 0.8,
+      "titleY": 18
+    },
+    "axisY": {
+      "domainColor": "#676A86",
+      "domainOpacity": 0.5,
+      "gridColor": "#676A86",
+      "gridDash": [1, 5],
+      "gridOpacity": 0.5,
+      "labelColor": "#676A86",
+      "labelOpacity": 0.7,
+      "labelPadding": 5,
+      "tickColor": "#676A86",
+      "tickOpacity": 0.5,
+      "ticks": false,
+      "titleAlign": "left",
+      "titleAngle": 0,
+      "titleBaseline": "bottom",
+      "titleColor": "#676A86",
+      "titleFontSize": 12,
+      "titleOpacity": 0.8,
+      "titleX": 0,
+      "titleY": -7
+    }
+  }
+}

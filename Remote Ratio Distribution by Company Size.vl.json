@@ -1,0 +1,138 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+  "text": "Remote Work Distribution by Company Size",
+  "subtitle": "Percentage of Jobs by Remote Ratio in Different Company Sizes",
+  "font": "Circular Std",
+  "fontSize": 16,
+  "fontWeight": "bold",
+  "color": "#34495E",
+  "subtitleFontSize": 14,
+  "subtitleColor": "#676A86",
+  "anchor": "start",
+  "frame": "group",
+  "offset": 25
+  },
+  "data": {
+  "url": "https://raw.githubusercontent.com/paizskarola/paizskarola.github.io/main/adatforras_tisztitott.csv",
+  "format": {"type": "csv"}
+  },
+  "transform": [
+  {
+  "aggregate": [{"op": "count", "as": "count"}],
+  "groupby": ["company_size", "remote_ratio"]
+  },
+  {
+  "window": [{"op": "sum", "field": "count", "as": "total_count"}],
+  "frame": [null, null],
+  "groupby": ["company_size"]
+  },
+  {"calculate": "datum.count / datum.total_count * 100", "as": "percentage"}
+  ],
+  "facet": {
+  "column": {
+  "field": "company_size",
+  "type": "nominal",
+  "header": {
+  "title": "",
+  "labelColor": "#676A86",
+  "titleColor": "#676A86"
+  },
+  "sort": ["S", "M", "L"]
+  }
+  },
+  "spec": {
+  "mark": {
+  "type": "arc",
+  "innerRadius": 60,
+  "tooltip": true
+  },
+  "encoding": {
+  "theta": {"field": "count", "type": "quantitative"},
+  "color": {
+  "field": "remote_ratio",
+  "type": "nominal",
+  "legend": {
+  "title": "Remote Ratio",
+  "labelColor": "#676A86",
+  "titleColor": "#676A86"
+  },
+  "scale": {
+  "range": ["#1E88E5", "#FF7043", "#4CAF50"]
+  }
+  },
+  "tooltip": [
+  {"field": "remote_ratio", "type": "nominal", "title": "Remote Ratio"},
+  {
+  "field": "percentage",
+  "type": "quantitative",
+  "title": "Percentage",
+  "format": ".2f"
+  }
+  ],
+  "opacity": {
+  "condition": {
+  "selection": "hover",
+  "value": 1
+  },
+  "value": 0.4
+  }
+  },
+  "selection": {
+  "hover": {
+  "type": "single",
+  "on": "mouseover",
+  "empty": "all",
+  "fields": ["remote_ratio"]
+  }
+  }
+  },
+  "config": {
+  "font": "Circular Std",
+  "range": {
+  "category": ["#1E88E5", "#FF7043", "#4CAF50"],
+  "diverging": ["#E6224B", "#E54753", "#C9C9C9", "#179FDB", "#122B39"],
+  "heatmap": ["#C9C9C9", "#179FDB", "#0063AF", "#122B39"],
+  "ordinal": ["#00A767", "#36B7B4", "#179FDB", "#0063AF", "#243B5A"]
+  },
+  "axisX": {
+  "domainColor": "#676A86",
+  "domainOpacity": 0.5,
+  "grid": false,
+  "labelAngle": 0,
+  "labelColor": "#676A86",
+  "labelOpacity": 0.7,
+  "labelPadding": 10,
+  "labelBaseline": "bottom",
+  "tickColor": "#676A86",
+  "tickOpacity": 0.5,
+  "titleAlign": "center",
+  "titleAnchor": "middle",
+  "titleColor": "#676A86",
+  "titleFontSize": 12,
+  "titleOpacity": 0.8,
+  "titleY": 15
+  },
+  "axisY": {
+  "domainColor": "#676A86",
+  "domainOpacity": 0.5,
+  "gridColor": "#676A86",
+  "gridDash": [1, 5],
+  "gridOpacity": 0.5,
+  "labelColor": "#676A86",
+  "labelOpacity": 0.7,
+  "labelPadding": 5,
+  "tickColor": "#676A86",
+  "tickOpacity": 0.5,
+  "ticks": false,
+  "titleAlign": "left",
+  "titleAngle": 0,
+  "titleBaseline": "bottom",
+  "titleColor": "#676A86",
+  "titleFontSize": 12,
+  "titleOpacity": 0.8,
+  "titleX": 0,
+  "titleY": -7
+  }
+  }
+  }
